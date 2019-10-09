@@ -119,7 +119,7 @@ import torchlex
 ### Defaults:
 - ComplexTensor default is complex=True. See explanation below.
 - ComplexTensor default is requires_grad=True.
-### 5 ways for creating a ComplexTensor
+### 5 ways to create a ComplexTensor
 1. Inserting a tuple of torch tensors or numpy arrays with the same size and dimensions. The first tensor/array will be the real part of the new ComplexTensor and the second tensor/array will be the imaginary part.
 ```
 a = torch.randn(3,5)
