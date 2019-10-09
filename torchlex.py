@@ -1,5 +1,5 @@
 import torch
-import torch.nn.functional as F
+from torch.distributions import Categorical
 import numpy as np
 import warnings
 
@@ -7,7 +7,7 @@ import warnings
 def log(z):
     if "ComplexTensor" in z.__class__.__name__:
         r, theta = z.euler()
-        result = ComplexTensor((torch.log(r), theta), z.requires_grad)
+        result = ComplexTensor((torch.log(r), theta), complex=True, requires_grad=z.requires_grad)
     else:
         result = torch.log(z)
     return result
@@ -18,7 +18,7 @@ def exp(z):
         a, b = z.real, z.imag
         real = torch.exp(a) * torch.cos(b)
         imag = torch.exp(a) * torch.sin(b)
-        result = ComplexTensor((real, imag), z.requires_grad)
+        result = ComplexTensor((real, imag), complex=True, requires_grad=z.requires_grad)
     else:
         result = torch.exp(z)
     return result
@@ -29,7 +29,7 @@ def sin(z):
         a, b = z.real, z.imag
         real = torch.sin(a) * torch.cosh(b)
         imag = torch.cos(a) * torch.sinh(b)
-        result = ComplexTensor((real, imag), z.requires_grad)
+        result = ComplexTensor((real, imag), complex=True, requires_grad=z.requires_grad)
     else:
         result = torch.sin(z)
     return result
@@ -40,7 +40,7 @@ def cos(z):
         a, b = z.real, z.imag
         real = torch.cos(a) * torch.cosh(b)
         imag = torch.sin(a) * torch.sinh(b)
-        result = ComplexTensor((real, imag), z.requires_grad)
+        result = ComplexTensor((real, imag), complex=True, requires_grad=z.requires_grad)
     else:
         result = torch.cos(z)
     return result
@@ -52,7 +52,7 @@ def tan(z):
         denominator = torch.cos(2*a) + torch.cosh(2*b)
         real = torch.sin(2*a) / denominator
         imag = torch.sinh(2*b) / denominator
-        result = ComplexTensor((real, imag), z.requires_grad)
+        result = ComplexTensor((real, imag), complex=True, requires_grad=z.requires_grad)
     else:
         result = torch.tan(z)
     return result
@@ -64,7 +64,7 @@ def tanh(z):
         denominator = torch.cosh(2*a) + torch.cos(2*b)
         real = torch.sinh(2 * a) / denominator
         imag = torch.sin(2 * a) / denominator
-        result = ComplexTensor((real, imag), z.requires_grad)
+        result = ComplexTensor((real, imag), complex=True, requires_grad=z.requires_grad)
     else:
         result = torch.tanh(z)
     return result
@@ -76,7 +76,7 @@ def sigmoid(z):
         denominator = 1 + 2 * torch.exp(-a) * torch.cos(b) + torch.exp(-2 * a)
         real = 1 + torch.exp(-a) * torch.cos(b) / denominator
         imag = torch.exp(-a) * torch.sin(b) / denominator
-        result = ComplexTensor((real, imag), z.requires_grad)
+        result = ComplexTensor((real, imag), complex=True, requires_grad=z.requires_grad)
     else:
         result = torch.sigmoid(z)
     return result
@@ -104,7 +104,7 @@ def CReLU(z):
         a, b = z.real, z.imag
         real = torch.relu(a)
         imag = torch.relu(b)
-        result = ComplexTensor((real, imag), z.requires_grad)
+        result = ComplexTensor((real, imag), complex=True, requires_grad=z.requires_grad)
     else:
         result = torch.relu(z)
     return result
@@ -121,7 +121,7 @@ def zReLU(z):
         mask = ((0 < z.angle()) * (z.angle() < np.pi/2)).float()
         real = a * mask
         imag = b * mask
-        result = ComplexTensor((real,imag), z.requires_grad)
+        result = ComplexTensor((real,imag), complex=True, requires_grad=z.requires_grad)
     else:
         result = torch.relu(z)
     return result
@@ -138,7 +138,7 @@ def modReLU(z, bias):
         mask = ((z_mag + bias) >= 0).float() * (1 + bias / z_mag)
         real = mask * a
         imag = mask * b
-        result = ComplexTensor((real, imag), z.requires_grad)
+        result = ComplexTensor((real, imag), complex=True, requires_grad=z.requires_grad)
     else:
         result = torch.relu(z)
     return result
@@ -150,7 +150,7 @@ class ComplexTensor:
         if 'tuple' in x.__class__.__name__:
             if len(x) == 2:
                 if 'ndarray' in x[0].__class__.__name__:
-                    ComplexTensor(x[0] + 1j*x[1])
+                    ComplexTensor(x[0] + 1j*x[1], requires_grad=self.requires_grad)
                 elif 'Tensor' in x[0].__class__.__name__:
                     a = x[0]
                     b = x[1]
@@ -178,9 +178,7 @@ class ComplexTensor:
         if 'z' not in self.__dict__:
             dim = a.dim()
             self.z = torch.cat((a.unsqueeze(dim),b.unsqueeze(dim)), dim=dim)
-        print("requires_grad", self.requires_grad)
         if self.requires_grad:
-            print('requires grads inside')
             self.z = self.z.requires_grad_()
 
     def requires_grad_(self):
@@ -201,8 +199,12 @@ class ComplexTensor:
         return self.z[idx].squeeze(self.z.dim()-1)
 
     def __repr__(self):
-        return 'ComplexTensor real part:\n' + "      "+ str(self.real)[6:] + ' \nComplexTensor imaginary part:\n' + "      " + str(self.imag)[6:]
-        # return str(self.z)
+        # return 'ComplexTensor real part:\n' + "      "+ str(self.real)[6:] + ' \nComplexTensor imaginary part:\n' + "      " + str(self.imag)[6:]
+        real = self.real.flatten()
+        imag = self.imag.flatten()
+        strings = np.asarray([complex(a, b) for a, b in zip(real, imag)]).astype(np.complex64).reshape(*self.size())
+        strings = strings.__repr__().replace("array", "ComplexTensor")
+        return strings
 
     def __len__(self):
         return len(self.z)
@@ -346,7 +348,7 @@ class ComplexTensor:
 
     def conj(self): #conjugate
         a, b = self.real, self.imag
-        return ComplexTensor((a, -b), True)
+        return ComplexTensor((a, -b), complex=True)
 
     def t(self):
         return self.T
@@ -360,7 +362,7 @@ class ComplexTensor:
             result = z_abs/torch.sum(z_abs)
         else:
             result = z_abs / torch.sum(z_abs, dim=dim)
-        return result
+        return Categorical(result)
 
     def wave(self, dim=None):
         z_abs = self.__abs__()
