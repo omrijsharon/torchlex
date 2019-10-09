@@ -166,12 +166,10 @@ exp_log_z = torchlex.exp(log_z)
 ```
 we get:
 ```
-ComplexTensor real part:
-      ([ 1.0000e+00, -4.3711e-08, -1.0000e+00]) 
-ComplexTensor imaginary part:
-      ([ 0.0000,  1.0000, -1.0000])
+ComplexTensor([ 1.000000e+00+0.j       , -4.371139e-08+1.j       ,
+       -9.999998e-01-1.0000001j], dtype=complex64)
 ```
-which is the original [1,1j,-1-1j] with small numerical error.
+which is the original [1,1j,-1-1j] with a small numerical error.
 
 ### euler representation
 We can get the r and <img src="https://latex.codecogs.com/svg.latex?\Large&space;\theta" title="\Large \theta" /> of Euler's representation. Lets compare ComplexTensor with Numpy: 
