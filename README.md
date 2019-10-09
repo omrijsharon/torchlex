@@ -1,9 +1,9 @@
 # torchlex
-Complex tensor and complex functions for pytorch.
+Pytorch extension for Complex tensors and complex functions.
 
 Inspired by https://github.com/williamFalcon/pytorch-complex-tensor.
 
-Based on:
+Based on the papers:
 - Deep Complex Networks (https://arxiv.org/pdf/1705.09792.pdf)
 - Unitary Evolution Recurrent Neural Networks (https://arxiv.org/pdf/1511.06464.pdf)
 - On Complex Valued Convolutional Neural Networks (https://arxiv.org/pdf/1602.09046.pdf)
