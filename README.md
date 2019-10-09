@@ -192,8 +192,12 @@ Numpy
 r =  [1.         1.         1.41421356] 
 theta =  [ 0.          1.57079633 -2.35619449]
 ```
-the last element of theta seems to be different, yet the difference between the two outputs is <img src="https://latex.codecogs.com/svg.latex?\Large&space;2\pi" title="\Large 2\pi" />
+the last element of theta seems to be different, yet the difference between the two outputs is <img src="https://latex.codecogs.com/svg.latex?\Large&space;2\pi" title="\Large 2\pi" />, which means it is the same angle.
 ## Quantum Learning
 ### Probability density function
-
+If z is 2x2 ComplexTensor, then:
+```
+abs_psi = z.PDF()
+```
+return the probabilities of measuring <img src="https://latex.codecogs.com/svg.latex?\Large&space;\psi_{ij}" title="\Large \psi_{ij}" />
 ### Wave function
