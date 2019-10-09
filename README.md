@@ -45,7 +45,7 @@ More information in the documentation below
 - [x] z.conj()          (Conjugate)
 - [x] z.T or z.t()      (Transpose)
 - [x] z.H or z.h()      (Hermitian Conjugate)
-- [x] requires_grad_()  (same as pytorch's requires_grad_())
+- [x] z.requires_grad_()  (same as pytorch's requires_grad_())
 
 ## Additional information
 ### Probability density function
