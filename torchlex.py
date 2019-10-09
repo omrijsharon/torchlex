@@ -15,7 +15,7 @@ def log(z):
 
 def exp(z):
     if "ComplexTensor" in z.__class__.__name__:
-        a, b = z.real(), z.imag()
+        a, b = z.real, z.imag
         real = torch.exp(a) * torch.cos(b)
         imag = torch.exp(a) * torch.sin(b)
         result = ComplexTensor((real, imag), True)
@@ -26,7 +26,7 @@ def exp(z):
 
 def sin(z):
     if "ComplexTensor" in z.__class__.__name__:
-        a, b = z.real(), z.imag()
+        a, b = z.real, z.imag
         real = torch.sin(a) * torch.cosh(b)
         imag = torch.cos(a) * torch.sinh(b)
         result = ComplexTensor((real, imag), True)
@@ -37,7 +37,7 @@ def sin(z):
 
 def cos(z):
     if "ComplexTensor" in z.__class__.__name__:
-        a, b = z.real(), z.imag()
+        a, b = z.real, z.imag
         real = torch.cos(a) * torch.cosh(b)
         imag = torch.sin(a) * torch.sinh(b)
         result = ComplexTensor((real, imag), True)
@@ -48,7 +48,7 @@ def cos(z):
 
 def tan(z):
     if "ComplexTensor" in z.__class__.__name__:
-        a, b = z.real(), z.imag()
+        a, b = z.real, z.imag
         denominator = torch.cos(2*a) + torch.cosh(2*b)
         real = torch.sin(2*a) / denominator
         imag = torch.sinh(2*b) / denominator
@@ -58,9 +58,46 @@ def tan(z):
     return result
 
 
+def tanh(z):
+    if "ComplexTensor" in z.__class__.__name__:
+        a, b = z.real, z.imag
+        denominator = torch.cosh(2*a) + torch.cos(2*b)
+        real = torch.sinh(2 * a) / denominator
+        imag = torch.sin(2 * a) / denominator
+        result = ComplexTensor((real, imag), True)
+    else:
+        result = torch.tanh(z)
+    return result
+
+
+def sigmoid(z):
+    if "ComplexTensor" in z.__class__.__name__:
+        a, b = z.real, z.imag
+        denominator = 1 + 2 * torch.exp(-a) * torch.cos(b) + torch.exp(-2 * a)
+        real = 1 + torch.exp(-a) * torch.cos(b) / denominator
+        imag = torch.exp(-a) * torch.sin(b) / denominator
+        result = ComplexTensor((real, imag), True)
+    else:
+        result = torch.sigmoid(z)
+    return result
+
+
+def softmax(z, dim):
+    '''
+    Complex-valued Neural Networks with Non-parametric Activation Functions
+    (Eq. 36)
+    https://arxiv.org/pdf/1802.08026.pdf
+    '''
+    if "ComplexTensor" in z.__class__.__name__:
+        result = torch.softmax(abs(z), dim=dim)
+    else:
+        result = torch.softmax(z, dim=dim)
+    return result
+
+
 def CReLU(z):
     if "ComplexTensor" in z.__class__.__name__:
-        a, b = z.real(), z.imag()
+        a, b = z.real, z.imag
         real = torch.relu(a)
         imag = torch.relu(b)
         result = ComplexTensor((real, imag), True)
@@ -74,7 +111,7 @@ def zReLU(z):
     Nitzan Guberman. On complex valued convolutional neural networks. arXiv preprint arXiv:1602.09046, 2016
     '''
     if "ComplexTensor" in z.__class__.__name__:
-        a, b = z.real(), z.imag()
+        a, b = z.real, z.imag
         mask = ((0 < z.angle()) * (z.angle() < np.pi/2)).float()
         real = a * mask
         imag = b * mask
@@ -90,7 +127,7 @@ def modReLU(z, bias):
     In order to have any non-linearity effect, b must be smaller than 0 (b<0).
     '''
     if "ComplexTensor" in z.__class__.__name__:
-        a, b = z.real(), z.imag()
+        a, b = z.real, z.imag
         z_mag = z.magnitude()
         mask = ((z_mag + bias) >= 0).float() * (1 + bias / z_mag)
         real = mask * a
@@ -140,16 +177,18 @@ class ComplexTensor:
     def requires_grad_(self):
         self.z = self.z.requires_grad_()
 
+    @property
     def real(self):
         idx = [slice(None)] * (self.z.dim()-1) + [slice(0, 1)]
         return self.z[idx].squeeze(self.z.dim()-1)
 
+    @property
     def imag(self):
         idx = [slice(None)] * (self.z.dim()-1) + [slice(1, 2)]
         return self.z[idx].squeeze(self.z.dim()-1)
 
     def __repr__(self):
-        return 'ComplexTensor real part:\n' + "      "+ str(self.real())[6:] + ' \nComplexTensor imaginary part:\n' + "      " + str(self.imag())[6:]
+        return 'ComplexTensor real part:\n' + "      "+ str(self.real)[6:] + ' \nComplexTensor imaginary part:\n' + "      " + str(self.imag)[6:]
         # return str(self.z)
 
     def __len__(self):
@@ -159,27 +198,27 @@ class ComplexTensor:
         return self.z.size()[:-1]
 
     def euler(self):
-        a, b = self.real(), self.imag()
+        a, b = self.real, self.imag
         r = torch.sqrt(a**2 + b**2)
         theta = torch.atan(b/a)
         theta[a < 0] += np.pi
         return r, theta
 
     def __abs__(self):
-        return self.real()**2 + self.imag()**2
+        return self.real**2 + self.imag**2
 
     def magnitude(self):
-        return torch.sqrt(self.real()**2 + self.imag()**2)
+        return torch.sqrt(self.real**2 + self.imag**2)
 
     def angle(self):
-        a, b = self.real(), self.imag()
+        a, b = self.real, self.imag
         theta = torch.atan(b / a)
         theta[a < 0] += np.pi
         theta = torch.fmod(theta, 2*np.pi)
         return theta
 
     def phase(self):
-        a, b = self.real(), self.imag()
+        a, b = self.real, self.imag
         theta = torch.atan(b / a)
         theta[a < 0] += np.pi
         return theta
@@ -205,10 +244,10 @@ class ComplexTensor:
 
     def __truediv__(self, other):
         if "ComplexTensor" in other.__class__.__name__:
-            a = self.real()
-            b = self.imag()
-            c = other.real()
-            d = other.imag()
+            a = self.real
+            b = self.imag
+            c = other.real
+            d = other.imag
             denominator = abs(other)
             real = (a * c + b * d) / denominator
             imag = (b * c - a * d) / denominator
@@ -228,10 +267,10 @@ class ComplexTensor:
 
     def __mul__(self, other):
         if "ComplexTensor" in other.__class__.__name__:
-            a = self.real()
-            b = self.imag()
-            c = other.real()
-            d = other.imag()
+            a = self.real
+            b = self.imag
+            c = other.real
+            d = other.imag
             real = a * c - b * d
             imag = a * d + b * c
             result = ComplexTensor((real, imag))
@@ -244,10 +283,10 @@ class ComplexTensor:
 
     def __matmul__(self, other):
         if "ComplexTensor" in other.__class__.__name__:
-            a = self.real()
-            b = self.imag()
-            c = other.real()
-            d = other.imag()
+            a = self.real
+            b = self.imag
+            c = other.real
+            d = other.imag
             real = a @ c - b @ d
             imag = a @ d + b @ c
             result = ComplexTensor((real, imag))
@@ -275,7 +314,7 @@ class ComplexTensor:
         return result
 
     def conj(self): #conjugate
-        a, b = self.real(), self.imag()
+        a, b = self.real, self.imag
         return ComplexTensor((a, -b), True)
 
     def t(self):
@@ -284,14 +323,22 @@ class ComplexTensor:
     def h(self):
         return self.H
 
+    def PDF(self, dim=None): #Probability density function
+        z_abs = self.__abs__()
+        if dim is None:
+            result = z_abs/torch.sum(z_abs)
+        else:
+            result = z_abs / torch.sum(z_abs, dim=dim)
+        return result
+
     @property
     def T(self): #transpose
-        a, b = self.real(), self.imag()
+        a, b = self.real, self.imag
         return ComplexTensor((a.t(), b.t()), True)
 
     @property
     def H(self): #hermitian conjugate
-        a, b = self.real(), self.imag()
+        a, b = self.real, self.imag
         return ComplexTensor((a.t(), -b.t()), True)
 
 # z = [-1+1j,1,1j,-1,-1j]
