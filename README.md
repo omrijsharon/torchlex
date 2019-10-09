@@ -62,7 +62,7 @@ If left empty or dim=None, the ComplexTensor will be divided by the sum of abs(z
 z.wave(dim)
 ```
 _dim_ plays the same roll as in torch.softmax function.
-This function returns a normalized ComplexTensor which is the equivalentof a quantum wave function.
+This function returns a normalized ComplexTensor which is the equivalent of a quantum wave function.
 The function divides the ComplexTensor by the sum of abs(z) in  dimension _dim_.
 If left empty or dim=None, the ComplexTensor will be divided by the sum of abs(z) in all dimentions.
 
