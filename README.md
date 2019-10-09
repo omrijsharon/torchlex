@@ -24,9 +24,10 @@ Based on:
 - [x] modReLU(z, bias)
 ### ComplexTensor Operation
 - [x] addition (z + other and other + z)
-- [x] division (z / other and other / z)
+- [x] subtraction (z - other and other - z)
 - [x] multiplication (z * other and other * z)
 - [x] matrix multiplication (z @ other and other @ z)
+- [x] division (z / other and other / z)
 ### ComplexTensor Functions and Properties
 - [x] z.real            (real part of z)
 - [x] z.imag            (imaginary part of z)
