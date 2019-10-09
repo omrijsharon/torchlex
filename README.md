@@ -19,6 +19,7 @@ Based on:
 - [x] sigmoid(z)
 - [x] softmax(z)
 ### ReLU function versions for complex numbers
+More information in the documentation below
 - [x] CReLU(z)
 - [x] zReLU(z)
 - [x] modReLU(z, bias)
@@ -52,3 +53,11 @@ Based on:
 z.PDF(dim)
 ```
 This function allows you to treat a ComplexTensor as a quantum wave function.
+'dim' plays the same roll as in torch.softmax function.
+If left empty or dim=None, 
+
+
+### ReLU function versions for complex numbers
+#### CReLU(z)
+#### zReLU(z)
+#### modReLU(z, bias)
