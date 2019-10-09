@@ -28,11 +28,11 @@ Based on:
 - [x] multiplication (z * other and other * z)
 - [x] matrix multiplication (z @ other and other @ z)
 ### ComplexTensor Functions and Properties
-- [x] z.real
-- [x] z.imag
-- [x] z.size()
-- [x] len(z)
-- [x] z.euler()         (returns tensors of <img src="https://latex.codecogs.com/svg.latex?\Large&space;\theta" title="\Large \theta" />
+- [x] z.real            (real part of z)
+- [x] z.imag            (imaginary part of z)
+- [x] z.size()          (tensor size)
+- [x] len(z)            (tensor length)
+- [x] z.euler()         (returns 2 tensors: R and <img src="https://latex.codecogs.com/svg.latex?\Large&space;\theta" title="\Large \theta" /> in Euler's representation)
 - [x] abs(z)            (<img src="https://latex.codecogs.com/svg.latex?\Large&space;z.real^{2}+z.imag^{2}" title="\Large z.real^{2}+z.imag^{2}" />)
 - [x] z.magnitude()     (<img src="https://latex.codecogs.com/svg.latex?\Large&space;\sqrt{z.real^{2}+z.imag^{2}}" title="\Large \sqrt{z.real^{2}+z.imag^{2}}" />)
 - [x] z.angle()         (Angle of a complex element <img src="https://latex.codecogs.com/svg.latex?\Large&space;(0<\theta<2\pi)" title="\Large (0<\theta<2\pi)" />)
@@ -41,4 +41,4 @@ Based on:
 - [x] z.conj()          (Conjugate)
 - [x] z.T or z.t()      (Transpose)
 - [x] z.H or z.h()      (Hermitian Conjugate)
-- [x] requires_grad_()
+- [x] requires_grad_()  (same as pytorch's requires_grad_())
