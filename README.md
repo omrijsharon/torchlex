@@ -59,20 +59,28 @@ If left empty or dim=None,
 
 ### ReLU function versions for complex numbers
 #### CReLU(z)
+Deep Complex Networks Eq.(5).
+
+https://arxiv.org/pdf/1705.09792.pdf
+
+Chiheb Trabelsi, Olexa Bilaniuk, Ying Zhang, Dmitriy Serdyuk, Sandeep Subramanian, João Felipe Santos, Soroush Mehri, Negar Rostamzadeh, Yoshua Bengio & Christopher J Pal
+
 #### zReLU(z)
-Also refered as Guberman ReLU.
 Pages 15-16 in the dissertation: On complex valued convolutional neural networks.
 
 https://arxiv.org/pdf/1602.09046.pdf
 
-    Nitzan Guberman. . arXiv preprint arXiv:1602.09046, 2016
+Nitzan Guberman, Amnon Shashua.
+
+Also refered as Guberman ReLU in Deep Complex Networks Eq.(5) (https://arxiv.org/pdf/1705.09792.pdf).
+
     
 #### modReLU(z, bias)
 Eq.(8) in the paper: Unitary Evolution Recurrent Neural Networks
 
 https://arxiv.org/pdf/1511.06464.pdf
   
-    Martin Arjovsky, Amar Shah, and Yoshua Bengio.
+Martin Arjovsky, Amar Shah, and Yoshua Bengio.
 
 Notice that |z| (z.magnitude) is always positive, so if b > 0  then |z| + b > = 0 always.
 In order to have any non-linearity effect, b must be smaller than 0 (b<0).
