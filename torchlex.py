@@ -349,6 +349,14 @@ class ComplexTensor:
             result = z_abs / torch.sum(z_abs, dim=dim)
         return result
 
+    def wave(self, dim=None):
+        z_abs = self.__abs__()
+        if dim is None:
+            result = self.z / torch.sum(z_abs)
+        else:
+            result = self.z / torch.sum(z_abs, dim=dim)
+        return ComplexTensor(result, True)
+
     @property
     def T(self): #transpose
         a, b = self.real, self.imag
