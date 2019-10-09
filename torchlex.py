@@ -242,6 +242,24 @@ class ComplexTensor:
             raise TypeError(str(other.__class__.__name__) + "and ComplexTensor cannot be added.")
         return result
 
+    def __sub__(self, other):
+        if "ComplexTensor" in other.__class__.__name__:
+            result = self.z - other.z
+        elif "Tensor" in other.__class__.__name__:
+            result = self.z - ComplexTensor(other).z
+        else:
+            raise TypeError("Cannot subtract " + str(other.__class__.__name__) + " from a ComplexTensor.")
+        return result
+
+    def __rsub__(self, other):
+        if "ComplexTensor" in other.__class__.__name__:
+            result = other.z - self.z
+        elif "Tensor" in other.__class__.__name__:
+            result = ComplexTensor(other).z - self.z
+        else:
+            raise TypeError("Cannot subtract a ComplexTensor from " + str(other.__class__.__name__) + ".")
+        return result
+
     def __truediv__(self, other):
         if "ComplexTensor" in other.__class__.__name__:
             a = self.real
