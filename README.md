@@ -131,7 +131,7 @@ z = torchlex.ComplexTensor((a,b))
 z_array = np.random.randn(3,5) + 1j*np.random.randn(3,5)
 z = torchlex.ComplexTensor(z_array)
 ```
-3. Inserting a ComplexTensor into ComplexTensor. Completely redundantoperation. A waste of computer power. Comes with a warning.
+3. Inserting a ComplexTensor into ComplexTensor. Completely redundant operation. A waste of computer power. Comes with a warning.
 ```
 z_array = np.random.randn(3,5) + 1j*np.random.randn(3,5)
 z_complex = torchlex.ComplexTensor(z_array)
