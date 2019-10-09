@@ -33,7 +33,7 @@ More information in the documentation below
 - [x] z.real            (real part of z)
 - [x] z.imag            (imaginary part of z)
 - [x] z.PDF(dim)        (Probability density function, more information in the documentation below)
-- [x] z.wave(dim)       (returning a normalized ComplexTensor which can be used as a wave function (more information below))
+- [x] z.wave(dim)       (returns a normalized ComplexTensor which can be used as a wave function (more information below))
 - [x] z.size()          (tensor size)
 - [x] len(z)            (tensor length)
 - [x] z.euler()         (returns 2 tensors: R and <img src="https://latex.codecogs.com/svg.latex?\Large&space;\theta" title="\Large \theta" /> in Euler's representation)
@@ -46,6 +46,14 @@ More information in the documentation below
 - [x] z.T or z.t()      (Transpose)
 - [x] z.H or z.h()      (Hermitian Conjugate)
 - [x] z.requires_grad_()  (same as pytorch's requires_grad_())
+### Examples
+- [ ] Defaults
+- [ ] 5 ways for creating a ComplexTensor
+- [ ] Using torchlex functions
+- [ ] Euler representation
+Quantum Learning:
+- [ ] Probability density function
+- [ ] Wave function
 
 ## Additional information
 ### Probability density function
@@ -55,7 +63,7 @@ z.PDF(dim)
 _dim_ plays the same roll as in torch.softmax function.
 This function returns the probability density function of your ComplexTensor which is the equivalent of the expectation value in quantum mechanics.
 The function divides (normalizes) the ComplexTensor by the sum of abs(z) in  dimension _dim_ and takes the abs of the result.
-If left empty or dim=None, the ComplexTensor will be divided by the sum of abs(z) in all dimentions.
+If left empty or dim=None, the ComplexTensor will be divided by the sum of abs(z) in all dimensions.
 
 ### Wave function
 ```
@@ -64,7 +72,7 @@ z.wave(dim)
 _dim_ plays the same roll as in torch.softmax function.
 This function returns a normalized ComplexTensor which is the equivalent of a quantum wave function.
 The function divides the ComplexTensor by the sum of abs(z) in  dimension _dim_.
-If left empty or dim=None, the ComplexTensor will be divided by the sum of abs(z) in all dimentions.
+If left empty or dim=None, the ComplexTensor will be divided by the sum of abs(z) in all dimensions.
 
 
 ### Softmax
@@ -101,3 +109,91 @@ Martin Arjovsky, Amar Shah, and Yoshua Bengio.
 
 Notice that |z| (z.magnitude) is always positive, so if b > 0  then |z| + b > = 0 always.
 In order to have any non-linearity effect, b must be smaller than 0 (b<0).
+
+## Examples
+In the begining of the code you must import the library:
+```
+import torchlex
+```
+### Defaults:
+- ComplexTensor default is complex=True. See explanation below.
+- ComplexTensor default is requires_grad=True.
+### 5 ways for creating a ComplexTensor
+1. Inserting a tuple of torch tensors or numpy arrays with the same size and dimensions. The first tensor/array will be the real part of the new ComplexTensor and the second tensor/array will be the imaginary part.
+```
+a = torch.randn(3,5)
+b = torch.randn(3,5)
+z = torchlex.ComplexTensor((a,b))
+```
+2. Converting a complex numpy array to a ComplexTensor:
+```
+z_array = np.random.randn(3,5) + 1j*np.random.randn(3,5)
+z = torchlex.ComplexTensor(z_array)
+```
+3. Inserting a ComplexTensor into ComplexTensor. Completely redundantoperation. A waste of computer power. Comes with a warning.
+```
+z_array = np.random.randn(3,5) + 1j*np.random.randn(3,5)
+z_complex = torchlex.ComplexTensor(z_array)
+z = torchlex.ComplexTensor(z)
+```
+4. a. Inserting a torch tensor / numpy array which contains only the real part of the ComplexTensor:
+```
+x = np.random.randn(3,5)
+#or
+x = torch.randn(3,5)
+z = torchlex.ComplexTensor(x, complex=False)
+```
+4. b. Inserting a torch tensor which contains the real and the imaginary parts of the ComplexTensor. Last dimension size must be 2.
+**Does not work with numpy arrays.**
+```
+x = np.random.randn(3,5,2)
+z = torchlex.ComplexTensor(x, complex=True)
+```
+5. Inserting a list of complex numbers to ComplexTensor:
+```
+x = [1, 1j, -1-1j]
+z = torchlex.ComplexTensor(x)
+```
+
+### Using torchlex functions
+exp(log(z)) should be equal to z:
+```
+x = [1,1j,-1-1j]
+z = torchlex.ComplexTensor(x, requires_grad=False)
+log_z = torchlex.log(z)
+exp_log_z = torchlex.exp(log_z)
+```
+we get:
+```
+ComplexTensor real part:
+      ([ 1.0000e+00, -4.3711e-08, -1.0000e+00]) 
+ComplexTensor imaginary part:
+      ([ 0.0000,  1.0000, -1.0000])
+```
+which is x = [1,1j,-1-1j] with small numerical error. It works!
+
+### euler representation
+We can get the r and <img src="https://latex.codecogs.com/svg.latex?\Large&space;\theta" title="\Large \theta" /> of Euler's representation. Lets compare ComplexTensor with Numpy: 
+```
+x = [1,1j,-1-1j]
+z = torchlex.ComplexTensor(x, requires_grad=False)
+r, theta = z.euler()
+print("ComplexTensor\nr = ", r, '\ntheta = ', theta)
+z_np = np.array(x)
+print("\nNumpy\nr = ", abs(z_np), '\ntheta = ', np.angle(z_np))
+```
+we get:
+```
+ComplexTensor
+r =  tensor([1.0000, 1.0000, 1.4142]) 
+theta =  tensor([0.0000, 1.5708, 3.9270])
+
+Numpy
+r =  [1.         1.         1.41421356] 
+theta =  [ 0.          1.57079633 -2.35619449]
+```
+the last element of theta seems to be different, yet the difference between the two outputs is <img src="https://latex.codecogs.com/svg.latex?\Large&space;2\pi" title="\Large 2\pi" />
+## Quantum Learning
+### Probability density function
+
+### Wave function
