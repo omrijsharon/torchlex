@@ -7,7 +7,7 @@ import warnings
 def log(z):
     if "ComplexTensor" in z.__class__.__name__:
         r, theta = z.euler()
-        result = ComplexTensor((torch.log(r), theta), True)
+        result = ComplexTensor((torch.log(r), theta), z.requires_grad)
     else:
         result = torch.log(z)
     return result
@@ -18,7 +18,7 @@ def exp(z):
         a, b = z.real, z.imag
         real = torch.exp(a) * torch.cos(b)
         imag = torch.exp(a) * torch.sin(b)
-        result = ComplexTensor((real, imag), True)
+        result = ComplexTensor((real, imag), z.requires_grad)
     else:
         result = torch.exp(z)
     return result
@@ -29,7 +29,7 @@ def sin(z):
         a, b = z.real, z.imag
         real = torch.sin(a) * torch.cosh(b)
         imag = torch.cos(a) * torch.sinh(b)
-        result = ComplexTensor((real, imag), True)
+        result = ComplexTensor((real, imag), z.requires_grad)
     else:
         result = torch.sin(z)
     return result
@@ -40,7 +40,7 @@ def cos(z):
         a, b = z.real, z.imag
         real = torch.cos(a) * torch.cosh(b)
         imag = torch.sin(a) * torch.sinh(b)
-        result = ComplexTensor((real, imag), True)
+        result = ComplexTensor((real, imag), z.requires_grad)
     else:
         result = torch.cos(z)
     return result
@@ -52,7 +52,7 @@ def tan(z):
         denominator = torch.cos(2*a) + torch.cosh(2*b)
         real = torch.sin(2*a) / denominator
         imag = torch.sinh(2*b) / denominator
-        result = ComplexTensor((real, imag), True)
+        result = ComplexTensor((real, imag), z.requires_grad)
     else:
         result = torch.tan(z)
     return result
@@ -64,7 +64,7 @@ def tanh(z):
         denominator = torch.cosh(2*a) + torch.cos(2*b)
         real = torch.sinh(2 * a) / denominator
         imag = torch.sin(2 * a) / denominator
-        result = ComplexTensor((real, imag), True)
+        result = ComplexTensor((real, imag), z.requires_grad)
     else:
         result = torch.tanh(z)
     return result
@@ -76,7 +76,7 @@ def sigmoid(z):
         denominator = 1 + 2 * torch.exp(-a) * torch.cos(b) + torch.exp(-2 * a)
         real = 1 + torch.exp(-a) * torch.cos(b) / denominator
         imag = torch.exp(-a) * torch.sin(b) / denominator
-        result = ComplexTensor((real, imag), True)
+        result = ComplexTensor((real, imag), z.requires_grad)
     else:
         result = torch.sigmoid(z)
     return result
@@ -104,7 +104,7 @@ def CReLU(z):
         a, b = z.real, z.imag
         real = torch.relu(a)
         imag = torch.relu(b)
-        result = ComplexTensor((real, imag), True)
+        result = ComplexTensor((real, imag), z.requires_grad)
     else:
         result = torch.relu(z)
     return result
@@ -121,7 +121,7 @@ def zReLU(z):
         mask = ((0 < z.angle()) * (z.angle() < np.pi/2)).float()
         real = a * mask
         imag = b * mask
-        result = ComplexTensor((real,imag),True)
+        result = ComplexTensor((real,imag), z.requires_grad)
     else:
         result = torch.relu(z)
     return result
@@ -138,7 +138,7 @@ def modReLU(z, bias):
         mask = ((z_mag + bias) >= 0).float() * (1 + bias / z_mag)
         real = mask * a
         imag = mask * b
-        result = ComplexTensor((real, imag), True)
+        result = ComplexTensor((real, imag), z.requires_grad)
     else:
         result = torch.relu(z)
     return result
@@ -146,6 +146,7 @@ def modReLU(z, bias):
 
 class ComplexTensor:
     def __init__(self, x, complex=True, requires_grad=True):
+        self.requires_grad = requires_grad
         if 'tuple' in x.__class__.__name__:
             if len(x) == 2:
                 if 'ndarray' in x[0].__class__.__name__:
@@ -171,17 +172,23 @@ class ComplexTensor:
                 a = x
                 b = torch.zeros_like(x)
         elif 'list' in x.__class__.__name__:
-            self.z = ComplexTensor(np.array(x)).z
+            self.z = ComplexTensor(np.array(x), requires_grad=self.requires_grad).z
         else:
             raise TypeError(x.__class__.__name__ + " cannot be converted to a ComplexTensor.")
         if 'z' not in self.__dict__:
             dim = a.dim()
             self.z = torch.cat((a.unsqueeze(dim),b.unsqueeze(dim)), dim=dim)
-        if requires_grad:
+        print("requires_grad", self.requires_grad)
+        if self.requires_grad:
+            print('requires grads inside')
             self.z = self.z.requires_grad_()
 
     def requires_grad_(self):
         self.z = self.z.requires_grad_()
+        self.requires_grad = True
+
+    def requires_grad_check(self, other):
+        return other.requires_grad or self.requires_grad
 
     @property
     def real(self):
@@ -236,14 +243,14 @@ class ComplexTensor:
         if "ComplexTensor" in other.__class__.__name__:
             result = self.z + other.z
         elif "Tensor" in other.__class__.__name__:
-            result = self.z + ComplexTensor(other).z
+            result = self.z + ComplexTensor(other, requires_grad=self.requires_grad_check(other)).z
         else:
             raise TypeError("ComplexTensor and " + str(other.__class__.__name__) + " cannot be added.")
         return result
 
     def __radd__(self, other):
         if "Tensor" in other.__class__.__name__:
-            result = self.z + ComplexTensor(other).z
+            result = self.z + ComplexTensor(other, requires_grad=self.requires_grad_check(other)).z
         else:
             raise TypeError(str(other.__class__.__name__) + "and ComplexTensor cannot be added.")
         return result
@@ -252,7 +259,7 @@ class ComplexTensor:
         if "ComplexTensor" in other.__class__.__name__:
             result = self.z - other.z
         elif "Tensor" in other.__class__.__name__:
-            result = self.z - ComplexTensor(other).z
+            result = self.z - ComplexTensor(other, requires_grad=self.requires_grad_check(other)).z
         else:
             raise TypeError("Cannot subtract " + str(other.__class__.__name__) + " from a ComplexTensor.")
         return result
@@ -261,7 +268,7 @@ class ComplexTensor:
         if "ComplexTensor" in other.__class__.__name__:
             result = other.z - self.z
         elif "Tensor" in other.__class__.__name__:
-            result = ComplexTensor(other).z - self.z
+            result = ComplexTensor(other, requires_grad=self.requires_grad_check(other)).z - self.z
         else:
             raise TypeError("Cannot subtract a ComplexTensor from " + str(other.__class__.__name__) + ".")
         return result
@@ -275,16 +282,16 @@ class ComplexTensor:
             denominator = abs(other)
             real = (a * c + b * d) / denominator
             imag = (b * c - a * d) / denominator
-            result = ComplexTensor((real, imag), complex=True)
+            result = ComplexTensor((real, imag), complex=True, requires_grad=self.requires_grad_check(other))
         elif "Tensor" in other.__class__.__name__:
-            result = self / ComplexTensor(other)
+            result = self / ComplexTensor(other, requires_grad=self.requires_grad_check(other))
         else:
             raise TypeError("ComplexTensor cannot divide " + str(other.__class__.__name__) + ".")
         return result
 
     def __rtruediv__(self, other):
         if "Tensor" in other.__class__.__name__:
-            result = ComplexTensor(other) / self
+            result = ComplexTensor(other, requires_grad=self.requires_grad_check(other)) / self
         else:
             raise TypeError(str(other.__class__.__name__) + " cannot divide a ComplexTensor.")
         return result
@@ -297,9 +304,9 @@ class ComplexTensor:
             d = other.imag
             real = a * c - b * d
             imag = a * d + b * c
-            result = ComplexTensor((real, imag))
+            result = ComplexTensor((real, imag), requires_grad=self.requires_grad_check(other))
         elif "Tensor" in other.__class__.__name__:
-            other = ComplexTensor((other, torch.zeros_like(other)))
+            other = ComplexTensor((other, torch.zeros_like(other)), requires_grad=self.requires_grad_check(other))
             result = self.__matmul__(other)
         else:
             raise TypeError("ComplexTensor cannot multiply " + str(other.__class__.__name__))
@@ -313,9 +320,9 @@ class ComplexTensor:
             d = other.imag
             real = a @ c - b @ d
             imag = a @ d + b @ c
-            result = ComplexTensor((real, imag))
+            result = ComplexTensor((real, imag), requires_grad=self.requires_grad_check(other))
         elif "Tensor" in other.__class__.__name__:
-            other = ComplexTensor((other, torch.zeros_like(other)))
+            other = ComplexTensor((other, torch.zeros_like(other)), requires_grad=self.requires_grad_check(other))
             result = self.__matmul__(other)
         else:
             raise TypeError("ComplexTensor cannot matrix - multiply " + str(other.__class__.__name__))
@@ -323,7 +330,7 @@ class ComplexTensor:
 
     def __rmul__(self, other):
         if "Tensor" in other.__class__.__name__:
-            other = ComplexTensor((other, torch.zeros_like(other)))
+            other = ComplexTensor((other, torch.zeros_like(other)), requires_grad=self.requires_grad_check(other))
             result = self.__mul__(other)
         else:
             raise TypeError('Cannot multiply ' + str(other.__class__.__name__) + " with a ComplexTensor.")
@@ -331,7 +338,7 @@ class ComplexTensor:
 
     def __rmatmul__(self, other):
         if "Tensor" in other.__class__.__name__:
-            other = ComplexTensor((other, torch.zeros_like(other)))
+            other = ComplexTensor((other, torch.zeros_like(other)), requires_grad=self.requires_grad_check(other))
             result = self.__matmul__(other)
         else:
             raise TypeError('Cannot multiply ' + str(other.__class__.__name__) + " with a ComplexTensor.")
@@ -372,12 +379,3 @@ class ComplexTensor:
     def H(self): #hermitian conjugate
         a, b = self.real, self.imag
         return ComplexTensor((a.t(), -b.t()), True)
-
-# z = [-1+1j,1,1j,-1,-1j]
-# x = np.array([z])
-# y = ComplexTensor(x)
-# # print("exp(log(y)):\n", y.log().exp())
-# # print(np.exp(np.log(z)))
-#
-# print(y/(y.conj()))
-# print(x/(x.conj()))
