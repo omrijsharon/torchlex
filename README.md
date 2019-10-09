@@ -47,13 +47,14 @@ More information in the documentation below
 - [x] z.H or z.h()      (Hermitian Conjugate)
 - [x] z.requires_grad_()  (same as pytorch's requires_grad_())
 ### Examples
-- [ ] Defaults
-- [ ] 5 ways for creating a ComplexTensor
-- [ ] Using torchlex functions
-- [ ] Euler representation
+- [x] Defaults
+- [x] 5 ways for creating a ComplexTensor
+- [x] Using torchlex functions
+- [x] Euler representation
+
 Quantum Learning:
-- [ ] Probability density function
-- [ ] Wave function
+- [x] Probability density function
+- [x] Wave function
 
 ## Additional information
 ### Probability density function
