@@ -52,10 +52,27 @@ More information in the documentation below
 ```
 z.PDF(dim)
 ```
-This function allows you to treat a ComplexTensor as a quantum wave function.
-'dim' plays the same roll as in torch.softmax function.
-If left empty or dim=None, 
+_dim_ plays the same roll as in torch.softmax function.
+This function returns the probability density function of your ComplexTensor which is the equivalent of the expectation value in quantum mechanics.
+The function divides (normalizes) the ComplexTensor by the sum of abs(z) in  dimension _dim_ and takes the abs of the result.
+If left empty or dim=None, the ComplexTensor will be divided by the sum of abs(z) in all dimentions.
 
+### Wave function
+```
+z.wave(dim)
+```
+_dim_ plays the same roll as in torch.softmax function.
+This function returns a normalized ComplexTensor which is the equivalentof a quantum wave function.
+The function divides the ComplexTensor by the sum of abs(z) in  dimension _dim_.
+If left empty or dim=None, the ComplexTensor will be divided by the sum of abs(z) in all dimentions.
+
+
+### Softmax
+Eq.(36) in the paper Complex-valued Neural Networks with Non-parametric Activation Functions
+
+https://arxiv.org/pdf/1802.08026.pdf
+
+Simone Scardapane, Steven Van Vaerenbergh, Amir Hussain and Aurelio Uncini
 
 ### ReLU function versions for complex numbers
 #### CReLU(z)
