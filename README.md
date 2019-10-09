@@ -62,9 +62,9 @@ If left empty or dim=None,
 #### zReLU(z)
 #### modReLU(z, bias)
 Eq.(8) in the paper: Unitary Evolution Recurrent Neural Networks
-
-Martin Arjovsky, Amar Shah, and Yoshua Bengio.
 https://arxiv.org/pdf/1511.06464.pdf
+Martin Arjovsky, Amar Shah, and Yoshua Bengio.
+
 
 arXiv preprint arXiv:1511.06464, 2015.
 
