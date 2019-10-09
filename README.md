@@ -32,6 +32,7 @@ Based on:
 - [x] z.real            (real part of z)
 - [x] z.imag            (imaginary part of z)
 - [x] z.PDF(dim)        (Probability density function, more information in the documentation below)
+- [x] z.wave(dim)       (returning a normalized ComplexTensor which can be used as a wave function (more information below).
 - [x] z.size()          (tensor size)
 - [x] len(z)            (tensor length)
 - [x] z.euler()         (returns 2 tensors: R and <img src="https://latex.codecogs.com/svg.latex?\Large&space;\theta" title="\Large \theta" /> in Euler's representation)
@@ -46,5 +47,8 @@ Based on:
 - [x] requires_grad_()  (same as pytorch's requires_grad_())
 
 ## Additional information
-
-
+### Probability density function
+```
+z.PDF(dim)
+```
+This function allows you to treat a ComplexTensor as a quantum wave function.
