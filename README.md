@@ -1,9 +1,9 @@
 # torchlex
-Complex tensor and complex functions for pytorch.
+Pytorch extension for Complex tensors and complex functions.
 
 Inspired by https://github.com/williamFalcon/pytorch-complex-tensor.
 
-Based on:
+Based on the papers:
 - Deep Complex Networks (https://arxiv.org/pdf/1705.09792.pdf)
 - Unitary Evolution Recurrent Neural Networks (https://arxiv.org/pdf/1511.06464.pdf)
 - On Complex Valued Convolutional Neural Networks (https://arxiv.org/pdf/1602.09046.pdf)
@@ -45,7 +45,7 @@ More information in the documentation below
 - [x] z.conj()          (Conjugate)
 - [x] z.T or z.t()      (Transpose)
 - [x] z.H or z.h()      (Hermitian Conjugate)
-- [x] requires_grad_()  (same as pytorch's requires_grad_())
+- [x] z.requires_grad_()  (same as pytorch's requires_grad_())
 
 ## Additional information
 ### Probability density function
@@ -62,7 +62,7 @@ If left empty or dim=None, the ComplexTensor will be divided by the sum of abs(z
 z.wave(dim)
 ```
 _dim_ plays the same roll as in torch.softmax function.
-This function returns a normalized ComplexTensor which is the equivalentof a quantum wave function.
+This function returns a normalized ComplexTensor which is the equivalent of a quantum wave function.
 The function divides the ComplexTensor by the sum of abs(z) in  dimension _dim_.
 If left empty or dim=None, the ComplexTensor will be divided by the sum of abs(z) in all dimentions.
 
