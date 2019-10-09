@@ -210,4 +210,4 @@ psi = z.PDF(dim=0)
 ```
 is a collection of 5 wave functions with 100 states each.
 This ComplexTensor can be used with Quantum Operators:
-<img src="https://latex.codecogs.com/svg.latex?\Large&space;\psi^{\textdagger}" title="\Large \psi^{\textdagger}" />
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;\psi^{\textdaggerdbl}" title="\Large \psi^{\textdaggerdbl}" />
