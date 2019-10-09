@@ -32,7 +32,7 @@ Based on:
 - [x] z.imag
 - [x] z.size()
 - [x] len(z)
-- [x] z.euler()         (returns tensors of <img src="https://latex.codecogs.com/svg.latex?\Large&space;R and \theta" title="\Large R and \theta" />
+- [x] z.euler()         (returns tensors of <img src="https://latex.codecogs.com/svg.latex?\Large&space;\theta" title="\Large \theta" />
 - [x] abs(z)            (<img src="https://latex.codecogs.com/svg.latex?\Large&space;z.real^{2}+z.imag^{2}" title="\Large z.real^{2}+z.imag^{2}" />)
 - [x] z.magnitude()     (<img src="https://latex.codecogs.com/svg.latex?\Large&space;\sqrt{z.real^{2}+z.imag^{2}}" title="\Large \sqrt{z.real^{2}+z.imag^{2}}" />)
 - [x] z.angle()         (Angle of a complex element <img src="https://latex.codecogs.com/svg.latex?\Large&space;(0<\theta<2\pi)" title="\Large (0<\theta<2\pi)" />)
