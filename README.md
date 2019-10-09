@@ -48,7 +48,7 @@ More information in the documentation below
 - [x] z.requires_grad_()  (same as pytorch's requires_grad_())
 ### Examples
 - [x] Defaults
-- [x] 5 ways for creating a ComplexTensor
+- [x] 5 ways to create a ComplexTensor
 - [x] Using torchlex functions
 - [x] Euler representation
 
@@ -171,7 +171,7 @@ ComplexTensor real part:
 ComplexTensor imaginary part:
       ([ 0.0000,  1.0000, -1.0000])
 ```
-which is x = [1,1j,-1-1j] with small numerical error. It works!
+which is the original [1,1j,-1-1j] with small numerical error.
 
 ### euler representation
 We can get the r and <img src="https://latex.codecogs.com/svg.latex?\Large&space;\theta" title="\Large \theta" /> of Euler's representation. Lets compare ComplexTensor with Numpy: 
