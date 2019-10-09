@@ -96,6 +96,10 @@ def softmax(z, dim):
 
 
 def CReLU(z):
+    '''
+    Eq.(4)
+    https://arxiv.org/pdf/1705.09792.pdf
+    '''
     if "ComplexTensor" in z.__class__.__name__:
         a, b = z.real, z.imag
         real = torch.relu(a)
@@ -109,6 +113,8 @@ def zReLU(z):
     '''
     Guberman ReLU:
     Nitzan Guberman. On complex valued convolutional neural networks. arXiv preprint arXiv:1602.09046, 2016
+    Eq.(5)
+    https://arxiv.org/pdf/1705.09792.pdf
     '''
     if "ComplexTensor" in z.__class__.__name__:
         a, b = z.real, z.imag
