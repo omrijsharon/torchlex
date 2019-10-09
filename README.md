@@ -61,3 +61,12 @@ If left empty or dim=None,
 #### CReLU(z)
 #### zReLU(z)
 #### modReLU(z, bias)
+Eq.(8) in the paper: Unitary Evolution Recurrent Neural Networks
+
+Martin Arjovsky, Amar Shah, and Yoshua Bengio.
+https://arxiv.org/pdf/1511.06464.pdf
+
+arXiv preprint arXiv:1511.06464, 2015.
+
+Notice that |z| (z.magnitude) is always positive, so if b > 0  then |z| + b > = 0 always.
+In order to have any non-linearity effect, b must be smaller than 0 (b<0).
