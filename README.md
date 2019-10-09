@@ -32,11 +32,11 @@ Based on:
 - [x] z.imag
 - [x] z.size()
 - [x] z.euler()
-- [x] abs(z)
 - [x] len(z)
+- [x] abs(z)
 - [x] z.magnitude()
-- [x] Angle of a complex element <img src="https://latex.codecogs.com/svg.latex?\Large&space;(0<\theta<2\pi)" title="\Large (0<\theta<2\pi)" /> z.angle()
-- [x] z.phase()
+- [x] Angle of a complex element <img src="https://latex.codecogs.com/svg.latex?\Large&space;(0<\theta<2\pi)" title="\Large (0<\theta<2\pi)" />: z.angle()
+- [x] Phase of a complex element (can be negative or <img src="https://latex.codecogs.com/svg.latex?\Large&space;<2\pi" title="\Large <2\pi" />): z.phase()
 - [x] Get raw torch Tensor: z.tensor() or z.z
 - [x] Conjugate: z.conj()
 - [x] Transpose: z.T or z.t()
