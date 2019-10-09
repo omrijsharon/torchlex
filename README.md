@@ -15,9 +15,9 @@ Based on:
 - [x] sin(z)
 - [x] cos(z)
 - [x] tan(z)
-- [ ] sigmoid(z)
-- [ ] tanh(z)
-- [ ] softmax(z)
+- [x] tanh(z)
+- [x] sigmoid(z)
+- [x] softmax(z)
 ### ReLU function versions for complex numbers
 - [x] CReLU(z)
 - [x] zReLU(z)
@@ -30,6 +30,7 @@ Based on:
 ### ComplexTensor Functions and Properties
 - [x] z.real            (real part of z)
 - [x] z.imag            (imaginary part of z)
+- [x] z.PDF(dim)        (Probability density function, more information in the documentation below)
 - [x] z.size()          (tensor size)
 - [x] len(z)            (tensor length)
 - [x] z.euler()         (returns 2 tensors: R and <img src="https://latex.codecogs.com/svg.latex?\Large&space;\theta" title="\Large \theta" /> in Euler's representation)
@@ -42,3 +43,7 @@ Based on:
 - [x] z.T or z.t()      (Transpose)
 - [x] z.H or z.h()      (Hermitian Conjugate)
 - [x] requires_grad_()  (same as pytorch's requires_grad_())
+
+## Additional information
+
+
