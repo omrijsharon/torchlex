@@ -19,6 +19,7 @@ Based on:
 - [x] sigmoid(z)
 - [x] softmax(z)
 ### ReLU function versions for complex numbers
+More information in the documentation below
 - [x] CReLU(z)
 - [x] zReLU(z)
 - [x] modReLU(z, bias)
@@ -51,4 +52,52 @@ Based on:
 ```
 z.PDF(dim)
 ```
-This function allows you to treat a ComplexTensor as a quantum wave function.
+_dim_ plays the same roll as in torch.softmax function.
+This function returns the probability density function of your ComplexTensor which is the equivalent of the expectation value in quantum mechanics.
+The function divides (normalizes) the ComplexTensor by the sum of abs(z) in  dimension _dim_ and takes the abs of the result.
+If left empty or dim=None, the ComplexTensor will be divided by the sum of abs(z) in all dimentions.
+
+### Wave function
+```
+z.wave(dim)
+```
+_dim_ plays the same roll as in torch.softmax function.
+This function returns a normalized ComplexTensor which is the equivalentof a quantum wave function.
+The function divides the ComplexTensor by the sum of abs(z) in  dimension _dim_.
+If left empty or dim=None, the ComplexTensor will be divided by the sum of abs(z) in all dimentions.
+
+
+### Softmax
+Eq.(36) in the paper Complex-valued Neural Networks with Non-parametric Activation Functions
+
+https://arxiv.org/pdf/1802.08026.pdf
+
+Simone Scardapane, Steven Van Vaerenbergh, Amir Hussain and Aurelio Uncini
+
+### ReLU function versions for complex numbers
+#### CReLU(z)
+Deep Complex Networks Eq.(5).
+
+https://arxiv.org/pdf/1705.09792.pdf
+
+Chiheb Trabelsi, Olexa Bilaniuk, Ying Zhang, Dmitriy Serdyuk, Sandeep Subramanian, João Felipe Santos, Soroush Mehri, Negar Rostamzadeh, Yoshua Bengio & Christopher J Pal
+
+#### zReLU(z)
+Pages 15-16 in the dissertation: On complex valued convolutional neural networks.
+
+https://arxiv.org/pdf/1602.09046.pdf
+
+Nitzan Guberman, Amnon Shashua.
+
+Also refered as Guberman ReLU in Deep Complex Networks Eq.(5) (https://arxiv.org/pdf/1705.09792.pdf).
+
+    
+#### modReLU(z, bias)
+Eq.(8) in the paper: Unitary Evolution Recurrent Neural Networks
+
+https://arxiv.org/pdf/1511.06464.pdf
+  
+Martin Arjovsky, Amar Shah, and Yoshua Bengio.
+
+Notice that |z| (z.magnitude) is always positive, so if b > 0  then |z| + b > = 0 always.
+In order to have any non-linearity effect, b must be smaller than 0 (b<0).
