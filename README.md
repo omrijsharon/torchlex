@@ -52,7 +52,7 @@ More information in the documentation below
 - [x] Using torchlex functions
 - [x] Euler representation
 
-Quantum Learning:
+### Quantum Learning:
 - [x] Probability density function
 - [x] Wave function
 
