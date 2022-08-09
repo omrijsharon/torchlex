@@ -139,7 +139,7 @@ z = torchlex.ComplexTensor(x, complex=False)
 4. b. Inserting a torch tensor which contains the real and the imaginary parts of the ComplexTensor. Last dimension size must be 2.
 **Does not work with numpy arrays.**
 ```
-x = np.random.randn(3,5,2)
+x = torch.randn(3,5,2)
 z = torchlex.ComplexTensor(x, complex=True)
 ```
 5. Inserting a list of complex numbers to ComplexTensor:
