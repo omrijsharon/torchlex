@@ -92,13 +92,11 @@ Pages 15-16 in the dissertation: [On complex valued convolutional neural network
 
 Nitzan Guberman, Amnon Shashua.
 
-Also refered as Guberman ReLU in Deep Complex Networks Eq.(5) (https://arxiv.org/pdf/1705.09792.pdf).
+Also refered as Guberman ReLU in [Deep Complex Networks](https://arxiv.org/pdf/1705.09792.pdf) Eq.(5).
 
     
 #### modReLU(z, bias)
-Eq.(8) in the paper: Unitary Evolution Recurrent Neural Networks
-
-https://arxiv.org/pdf/1511.06464.pdf
+Eq.(8) in the paper: [Unitary Evolution Recurrent Neural Networks](https://arxiv.org/pdf/1511.06464.pdf).
   
 Martin Arjovsky, Amar Shah, and Yoshua Bengio.
 
