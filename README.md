@@ -1,7 +1,7 @@
 # torchlex
 Pytorch extension for Complex tensors and complex functions.
 
-Inspired by https://github.com/williamFalcon/pytorch-complex-tensor.
+Inspired by the unfinished work of [William Falcon: pytorch-complex-tensor](https://github.com/williamFalcon/pytorch-complex-tensor).
 
 Based on the papers:
 - [Deep Complex Networks](https://arxiv.org/pdf/1705.09792.pdf)
