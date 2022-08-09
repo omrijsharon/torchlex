@@ -77,24 +77,18 @@ If left empty or dim=None, the ComplexTensor will be divided by the sum of abs(z
 
 
 ### Softmax
-Eq.(36) in the paper Complex-valued Neural Networks with Non-parametric Activation Functions
-
-https://arxiv.org/pdf/1802.08026.pdf
+Eq.(36) in the paper [Complex-valued Neural Networks with Non-parametric Activation Functions](https://arxiv.org/pdf/1802.08026.pdf)
 
 Simone Scardapane, Steven Van Vaerenbergh, Amir Hussain and Aurelio Uncini
 
 ### ReLU function versions for complex numbers
 #### CReLU(z)
-Deep Complex Networks Eq.(5).
-
-https://arxiv.org/pdf/1705.09792.pdf
+[Deep Complex Networks](https://arxiv.org/pdf/1705.09792.pdf) Eq.(5).
 
 Chiheb Trabelsi, Olexa Bilaniuk, Ying Zhang, Dmitriy Serdyuk, Sandeep Subramanian, João Felipe Santos, Soroush Mehri, Negar Rostamzadeh, Yoshua Bengio & Christopher J Pal
 
 #### zReLU(z)
-Pages 15-16 in the dissertation: On complex valued convolutional neural networks.
-
-https://arxiv.org/pdf/1602.09046.pdf
+Pages 15-16 in the dissertation: [On complex valued convolutional neural networks](https://arxiv.org/pdf/1602.09046.pdf).
 
 Nitzan Guberman, Amnon Shashua.
 
